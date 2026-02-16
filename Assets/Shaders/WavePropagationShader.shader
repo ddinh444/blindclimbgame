@@ -72,6 +72,7 @@
                 {
                     AudioSourceData src = _AudioSources[i];
 
+                    //if distance from 
                     float d = distance(worldPos, src.position);
                     float delta = abs(d - src.radius);
 
