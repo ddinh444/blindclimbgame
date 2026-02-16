@@ -99,3 +99,19 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+.vscode/extensions.json
+.vscode/launch.json
+.vscode/settings.json
+Assets/XR/AndroidXR/AndroidXRSettingsInitializer
+Assets/XR/Settings/OpenXR Package Settings.asset
+blindclimbgame.slnx
+ProjectSettings/Packages/com.unity.learn.iet-framework/Settings.json
+ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json
+Assets/XR/AndroidXR/AndroidXRSettingsInitializer
+Assets/XR/Settings/OpenXR Package Settings.asset
+ProjectSettings/Packages/com.unity.learn.iet-framework/Settings.json
+ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json
+Assets/XR/AndroidXR/AndroidXRSettingsInitializer
+Assets/XR/Settings/OpenXR Package Settings.asset
+ProjectSettings/Packages/com.unity.learn.iet-framework/Settings.json
+ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json
