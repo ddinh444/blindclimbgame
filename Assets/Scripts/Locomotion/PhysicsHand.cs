@@ -49,7 +49,7 @@ public class PhysicsHand : MonoBehaviour
 
         if (isColliding)
         {
-            ApplyPushToPlayer();
+            //ApplyPushToPlayer();
         }
 
     }
