@@ -38,16 +38,17 @@ public class PhysicsContinousMovement : MonoBehaviour
         temp.y = playerCollider.transform.position.y;
         playerCollider.transform.position = temp;
 
+        float control = 1;
         if (!IsGrounded())
         {
-            return;
+            control = airControl;
         }
 
         Vector3 moveDir = ComputeDesiredMoveDirection(LeftHandMoveInput.ReadValue());
         Vector3 targetSpeed = moveDir * maxSpeed;
         Vector3 velDiff = targetSpeed - playerRigidbody.linearVelocity;
         velDiff.y = 0;
-        playerRigidbody.AddForce(velDiff * acceleration, ForceMode.Acceleration);
+        playerRigidbody.AddForce(velDiff * acceleration * control, ForceMode.Acceleration);
     }
 
     Vector3 ComputeDesiredMoveDirection(Vector2 input)

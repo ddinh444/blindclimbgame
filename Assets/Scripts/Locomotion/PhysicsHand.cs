@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit.Inputs.Readers;
 
 /// <summary>
 /// This script controls a physics hand separate from the XR rig 
@@ -21,9 +22,15 @@ public class PhysicsHand : MonoBehaviour
     [SerializeField] Rigidbody playerRigidbody;
     [SerializeField] float springiness = 50f;
     [SerializeField] float drag = 25f;
+    [Header("Grabbing")]
+    [SerializeField] string grabTag = "GrabPoint";
+    [SerializeField] XRInputValueReader<float> grabInput;
+    bool isGrabbing = false;
 
     bool isColliding = false;
-    bool isGrabbing = false;
+    float maxFrictionOfCollisions = 0f;
+
+    
     void Start()
     {
         transform.position = controllerTransform.position;
@@ -38,10 +45,13 @@ public class PhysicsHand : MonoBehaviour
     {
         PIDMovement();
         PIDRotation();
-        if (isColliding || isGrabbing)
+
+
+        if (isColliding)
         {
             ApplyPushToPlayer();
         }
+
     }
 
     void PIDMovement()
@@ -82,9 +92,12 @@ public class PhysicsHand : MonoBehaviour
         Vector3 displacement = transform.position - controllerTransform.position;
         Vector3 force = displacement * springiness;
         float dragCoefficient = GetDrag();
+        float frictionCoefficient = maxFrictionOfCollisions;
+        Vector3 springForce = force * frictionCoefficient;
+        Vector3 dragForce = dragCoefficient * -playerRigidbody.linearVelocity * drag * frictionCoefficient;
 
-        playerRigidbody.AddForce(force, ForceMode.Acceleration);
-        playerRigidbody.AddForce(dragCoefficient * -playerRigidbody.linearVelocity * drag, ForceMode.Acceleration);
+        playerRigidbody.AddForce(springForce, ForceMode.Acceleration);
+        playerRigidbody.AddForce(dragForce, ForceMode.Acceleration);
     }
 
     Vector3 previousPosition;
@@ -97,13 +110,31 @@ public class PhysicsHand : MonoBehaviour
         return drag;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionStay(Collision collision)
     {
         isColliding = true;
+
+        if (collision.collider.material.dynamicFriction > maxFrictionOfCollisions)
+        {
+            maxFrictionOfCollisions = collision.collider.material.dynamicFriction;
+        }
+    }
+
+    private void StartGrab()
+    {
+        isGrabbing = true;
+        handRigidbody.isKinematic = true;
+    }
+
+    private void EndGrab()
+    {
+        isGrabbing = false;
+        handRigidbody.isKinematic = false;
     }
 
     private void OnCollisionExit(Collision collision)
     {
         isColliding = false;
+        maxFrictionOfCollisions = 0.0f;
     }
 }

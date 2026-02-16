@@ -8,7 +8,11 @@ public class SnapTurn : MonoBehaviour
     [Tooltip("Reads input data from the right hand controller. Input Action must be a Value action type (Vector 2).")]
     XRInputValueReader<Vector2> RightHandTurnInput = new XRInputValueReader<Vector2>("Right Hand Snap Turn");
     [SerializeField]
-    private Transform turnedTransform;
+    [Tooltip("Rotated around the pivot transform.")]
+    Transform xrOrigin;
+    [SerializeField]
+    [Tooltip("The transform whose position will be pivoted around, usually the camera. Needed because the xr origin does not follow the position of the HMD, so rotating the xr origin will make the HMD/controllers pivot around it instead rotating locally.")]
+    Transform pivotTransform;
     [SerializeField]
     [Tooltip("How much the player is turned per snap turn.")]
     private float turnAngle = 45;
@@ -33,10 +37,17 @@ public class SnapTurn : MonoBehaviour
         {
             timer = 0;
         }
+    }
 
-        if(timer < 0)
+    void FixedUpdate()
+    {
+        float turnCoefficient = GetTurnCoefficient(RightHandTurnInput.ReadValue().normalized);
+        if (timer < 0)
         {
-            turnedTransform.transform.Rotate(Vector3.up * turnAngle * turnCoefficient);
+            float turnAmount = turnAngle * turnCoefficient;
+            Vector3 pivot = pivotTransform.position;
+            pivot.y = xrOrigin.position.y;
+            xrOrigin.RotateAround(pivot, Vector3.up, turnAmount);
             timer = timeBetweenTurns;
         }
     }
