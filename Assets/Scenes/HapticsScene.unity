@@ -806,6 +806,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 690397556}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!1 &516735322 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4582636002714801231, guid: d133046990ce1b04cb56b2ff7fe3e95e, type: 3}
+  m_PrefabInstance: {fileID: 638177856}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &604616726
 GameObject:
   m_ObjectHideFlags: 0
@@ -926,17 +931,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4582636002714801231, guid: d133046990ce1b04cb56b2ff7fe3e95e, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5010213603295973153, guid: d133046990ce1b04cb56b2ff7fe3e95e, type: 3}
+      propertyPath: RightHandTurnInput.m_InputActionReference
+      value: 
+      objectReference: {fileID: 1805122819}
+    - target: {fileID: 6335845057086135161, guid: d133046990ce1b04cb56b2ff7fe3e95e, type: 3}
+      propertyPath: LeftHandMoveInput.m_InputActionReference
+      value: 
+      objectReference: {fileID: 1790259199}
     - target: {fileID: 7117713512469430438, guid: d133046990ce1b04cb56b2ff7fe3e95e, type: 3}
       propertyPath: m_Name
       value: Physics XR Rig 1
       objectReference: {fileID: 0}
     - target: {fileID: 7768573732415698928, guid: d133046990ce1b04cb56b2ff7fe3e95e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 27.199675
+      value: 12.69
       objectReference: {fileID: 0}
     - target: {fileID: 7768573732415698928, guid: d133046990ce1b04cb56b2ff7fe3e95e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -13.789999
+      value: -1.07
       objectReference: {fileID: 0}
     - target: {fileID: 7768573732415698928, guid: d133046990ce1b04cb56b2ff7fe3e95e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1969,6 +1986,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 690397556}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!114 &1006568253 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2473835532683214483, guid: d133046990ce1b04cb56b2ff7fe3e95e, type: 3}
+  m_PrefabInstance: {fileID: 638177856}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b734f2bd29eeddd4d85afb0c266228c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1013515552
 GameObject:
   m_ObjectHideFlags: 0
@@ -3622,6 +3650,34 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1790259199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
+  m_Name: XRI Left Locomotion/Move
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
+  m_Asset: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  m_ActionId: 9693e25f-8a4f-4aed-842f-3961243c69a1
+--- !u!114 &1805122819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
+  m_Name: XRI Right Locomotion/Snap Turn
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
+  m_Asset: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  m_ActionId: 44441ad6-5762-466d-ad54-aa44fcd61a5c
 --- !u!1 &1815584238
 GameObject:
   m_ObjectHideFlags: 0
@@ -3860,6 +3916,7 @@ GameObject:
   - component: {fileID: 1956484810}
   - component: {fileID: 1956484809}
   - component: {fileID: 1956484814}
+  - component: {fileID: 1956484815}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -3885,8 +3942,8 @@ MonoBehaviour:
   maxAmplitude: 1
   minVibrationDuration: 1
   hapticImpulsePlayers:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 2122179905}
+  - {fileID: 1006568253}
 --- !u!136 &1956484810
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4009,6 +4066,22 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &1956484815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1956484808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2af2102938465b740ad332f158a0866a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PrototypeDemoEnemy
+  speed: 8
+  aggroDistance: 3.5
+  attackDistance: 2
+  target: {fileID: 516735322}
 --- !u!1 &1970411180
 GameObject:
   m_ObjectHideFlags: 0
@@ -4208,6 +4281,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2122179905 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6761924260402643067, guid: d133046990ce1b04cb56b2ff7fe3e95e, type: 3}
+  m_PrefabInstance: {fileID: 638177856}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b734f2bd29eeddd4d85afb0c266228c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2139504454
 GameObject:
   m_ObjectHideFlags: 0
