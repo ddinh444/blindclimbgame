@@ -1,19 +1,23 @@
-Shader "Custom/NewUnlitUniversalRenderPipelineShader"
+﻿Shader "Custom/EcholocationShader"
 {
     Properties
     {
-        [MainColor] _BaseColor("Base Color", Color) = (1, 1, 1, 1)
-        _OutlineThickness("Outline Thickness", Range(0,0.1)) = 0.03
+        [MainColor] _BaseColor("Base Color", Color) = (1,1,1,1)
+
+        _RingWidth ("Ring Width", Float) = 0.25
     }
 
     SubShader
     {
-        Tags { "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" }
+        Tags
+        {
+            "RenderType"="Opaque"
+            "RenderPipeline"="UniversalPipeline"
+        }
 
         Pass
         {
             HLSLPROGRAM
-
             #pragma vertex vert
             #pragma fragment frag
 
@@ -23,7 +27,7 @@ Shader "Custom/NewUnlitUniversalRenderPipelineShader"
             {
                 float3 position;
                 float radius;
-                float  ttl;
+                float strength;
             };
 
             StructuredBuffer<AudioSourceData> _AudioSources;
@@ -55,10 +59,6 @@ Shader "Custom/NewUnlitUniversalRenderPipelineShader"
                 return OUT;
             }
 
-            float EaseOutQuad(float x) {
-                return 1.0 - (1.0 - x) * (1.0 - x);
-            }
-
             float ComputeEcholocation(float3 worldPos)
             {
                 float accum = 0.0;
@@ -68,14 +68,13 @@ Shader "Custom/NewUnlitUniversalRenderPipelineShader"
                 {
                     AudioSourceData src = _AudioSources[i];
 
+                    //if distance from 
                     float d = distance(worldPos, src.position);
                     float delta = abs(d - src.radius);
 
                     float ring = 1.0 - smoothstep(0.0, _RingWidth, delta);
 
-                    float ageFade = EaseOutQuad(src.ttl);
-
-                    accum += ring * ageFade;
+                    accum += ring * src.strength;
                 }
 
                 return saturate(accum);
@@ -96,46 +95,39 @@ Shader "Custom/NewUnlitUniversalRenderPipelineShader"
 
         Pass
         {
-            Cull front
-            
-            HLSLPROGRAM
-            
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            Name "DepthNormals"
+            Tags { "LightMode"="DepthNormals" }
 
+            HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 
-            
-            CBUFFER_START(UnityPerMaterial)
-                half4 _BaseColor;
-            CBUFFER_END
-            float _OutlineThickness;
-
-            struct appdata{
-                float4 vertex : POSITION;  
-                float4 normal : NORMAL;
+            struct Attributes
+            {
+                float4 positionOS : POSITION;
+                float2 uv         : TEXCOORD0;
+                half3 normal : NORMAL;
             };
 
-
-            struct v2f{
-                float4 position : SV_POSITION;
-                float3 posWS : TEXCOORD0;
+            struct Varyings
+            {
+                float4 positionHCS : SV_POSITION;
+                float3 normal : TEXCOORD0;
             };
 
-            v2f vert(appdata IN){
-                v2f o;
-                float4 normal = normalize(IN.normal);
-                float4 offset = normal * _OutlineThickness;
-                float4 position = IN.vertex + offset;
-
-                o.position = TransformObjectToHClip(position.xyz);
-                o.posWS =  mul(unity_ObjectToWorld, position).xyz;
-
-                return o;
+            Varyings vert(Attributes IN)
+            {
+                Varyings OUT;
+                OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
+                OUT.normal = TransformObjectToWorldNormal(IN.normal);
+                return OUT;
             }
 
-            half4 frag (v2f IN) : SV_Target{
-                return _BaseColor;
+            half4 frag(Varyings IN) : SV_Target
+            {
+                return half4(IN.normal,1);
             }
 
             ENDHLSL
