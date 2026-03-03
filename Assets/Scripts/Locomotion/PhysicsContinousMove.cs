@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit.Inputs.Haptics;
 using UnityEngine.XR.Interaction.Toolkit.Inputs.Readers;
 
 public class PhysicsContinousMovement : MonoBehaviour
@@ -16,15 +18,31 @@ public class PhysicsContinousMovement : MonoBehaviour
     [Range(0,1)]
     [Tooltip("How much control the player has in the air. 0 = no control at all, 1 = same amount of control as on the ground.")]
     private float airControl = 0.5f;
-    [SerializeField]
-    [Tooltip("How far from the player's position the ground checking ray goes.")]
-    private float groundCheckRayDistance = 0.25f;
+
+    [SerializeField] private float fallDmgVelocityThreshold = 12f;
+    [SerializeField] private float slowMultiplier = 0.85f;
+    [SerializeField] private float fallDmgPenaltyDuration = 15f;
+    [SerializeField] private float fallDmgStaminaDuration = 10f;
+    [SerializeField] private float fallDmgTimeToStartBreathingHeavy = 5f;
+    [SerializeField] private AudioSource fallDmgHurtNoise;
+    private float penaltyTimer = 0f;
+    private float lastVerticalVelocity = 0f;
+    private bool wasGroundedLastFrame = true;
+
+    [SerializeField] private float staminaDuration = 50.0f;
+    [SerializeField] private float timeToStartBreathingHeavy = 40.0f;
+    [SerializeField] private AudioSource heavyBreath;
+    [SerializeField] private HapticImpulsePlayer leftControllerHaptics;
+    [SerializeField] private HapticImpulsePlayer rightControllerHaptics;
+    public bool hasStamina { get; private set; } = true;
+    private float airTimer = 0f;
 
     private Camera cam;
     private Rigidbody playerRigidbody;
     [SerializeField]
-    [Tooltip("Collider that the player uses. This script moves the collider to follow the camera's x and z coordinates so that moving in real life affects the in-game collider position.")]
-    private Collider playerCollider;
+    private CapsuleCollider bodyCollider;
+    [SerializeField]
+    private LayerMask groundLayer;
 
     void Start()
     {
@@ -34,21 +52,85 @@ public class PhysicsContinousMovement : MonoBehaviour
 
     private void FixedUpdate()
     {   
-        Vector3 temp = cam.transform.position;
-        temp.y = playerCollider.transform.position.y;
-        playerCollider.transform.position = temp;
+        bool grounded = IsGrounded();
 
+        //check for fall damage
+        if(grounded && !wasGroundedLastFrame)
+        {
+            HandleLanding(lastVerticalVelocity);
+        }
+
+        float currentStaminaDuration = staminaDuration;
+        float heavyBreathTime = timeToStartBreathingHeavy;
+
+        //hurt from fall damage
+        if(penaltyTimer > 0)
+        {
+            penaltyTimer -= Time.fixedDeltaTime;
+            currentStaminaDuration = fallDmgStaminaDuration;
+            heavyBreathTime = fallDmgTimeToStartBreathingHeavy;
+        }
+
+        //determine control of movement and air timer
         float control = 1;
-        if (!IsGrounded())
+        if (!grounded)
         {
             control = airControl;
+
+            airTimer += Time.fixedDeltaTime;
+        }
+        else
+        {
+            airTimer = 0;
+        }
+
+        //check for stamina depletion
+        if(airTimer >= currentStaminaDuration)
+        {
+            hasStamina = false;
+        }
+        else
+        {
+            hasStamina = true;
+        }
+
+        //about to run out of stamina
+        if(airTimer >= heavyBreathTime || penaltyTimer > 0)
+        {
+            if (!heavyBreath.isPlaying)
+            {
+                heavyBreath.Play();
+            }
+            leftControllerHaptics.SendHapticImpulse(0.25f, 0.5f);
+            rightControllerHaptics.SendHapticImpulse(0.25f, 0.5f);
+        }
+        else
+        {
+            heavyBreath.Stop();
         }
 
         Vector3 moveDir = ComputeDesiredMoveDirection(LeftHandMoveInput.ReadValue());
-        Vector3 targetSpeed = moveDir * maxSpeed;
+        Vector3 targetSpeed = penaltyTimer > 0 ? moveDir * maxSpeed : moveDir * maxSpeed * slowMultiplier;
         Vector3 velDiff = targetSpeed - playerRigidbody.linearVelocity;
         velDiff.y = 0;
         playerRigidbody.AddForce(velDiff * acceleration * control, ForceMode.Acceleration);
+
+        lastVerticalVelocity = playerRigidbody.linearVelocity.y;
+        wasGroundedLastFrame = grounded;
+    }
+
+    void HandleLanding(float impactVelocity)
+    {
+        if(Math.Abs(impactVelocity) > fallDmgVelocityThreshold)
+        {
+            penaltyTimer = fallDmgPenaltyDuration;
+            fallDmgHurtNoise.Play();
+            leftControllerHaptics.SendHapticImpulse(1f, .65f);
+            rightControllerHaptics.SendHapticImpulse(1f, 0.65f);
+            GameEvents.TriggerFallDmgNoise(transform.position);
+            EcholocationSingleton.Instance.AddSound(transform.position, 4, fallDmgHurtNoise.maxDistance);
+        }
+
     }
 
     Vector3 ComputeDesiredMoveDirection(Vector2 input)
@@ -69,6 +151,10 @@ public class PhysicsContinousMovement : MonoBehaviour
 
     bool IsGrounded()
     {
-        return Physics.Raycast(transform.position + Vector3.up, Vector3.down, 1 + groundCheckRayDistance);
+        Vector3 start = bodyCollider.transform.TransformPoint(bodyCollider.center);
+        float rayLength = bodyCollider.height / 2 - bodyCollider.radius + 0.1f;
+        bool hasHit = Physics.SphereCast(start, bodyCollider.radius, Vector3.down, out RaycastHit info, rayLength, groundLayer);
+        Debug.DrawRay(start, Vector3.down * rayLength, Color.green, Time.fixedDeltaTime);
+        return hasHit;
     }
 }

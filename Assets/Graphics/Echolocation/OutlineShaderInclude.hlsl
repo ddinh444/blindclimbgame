@@ -53,7 +53,7 @@ void DepthBasedOutlines_float(float4 UV, float2 maxPxOffset, out float Out){
     float g = dx + dy;
     */
 
-    Out = step(0.0001,g);
+    Out = smoothstep(0.00009, 0.00011,g);
     //Out = smoothstep(0.01, 0.03, g);
 }
 
@@ -82,7 +82,7 @@ void NormalBasedOutlines_float(float4 UV, float2 maxPxOffset, out float Out){
     float3 dy = ddy(centerNormal);
     float g = dot(dx,dx) + dot(dy,dy);
     */
-    Out = sqrt(g);
+    Out = smoothstep(1.5f, 2.25f,sqrt(g));
 }
 
 void CalculateOutlinesWithAudioSourceMasks_float(float3 wsPos, float4 UV, float2 maxPxOffset, out float Out){

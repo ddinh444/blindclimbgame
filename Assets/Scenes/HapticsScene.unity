@@ -1519,6 +1519,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 895867752}
     - target: {fileID: 6335845057086135161, guid: d133046990ce1b04cb56b2ff7fe3e95e, type: 3}
+      propertyPath: maxSpeed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6335845057086135161, guid: d133046990ce1b04cb56b2ff7fe3e95e, type: 3}
+      propertyPath: airControl
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6335845057086135161, guid: d133046990ce1b04cb56b2ff7fe3e95e, type: 3}
       propertyPath: LeftHandMoveInput.m_InputActionReference
       value: 
       objectReference: {fileID: 1790259199}
@@ -1565,6 +1573,14 @@ PrefabInstance:
     - target: {fileID: 7768573732415698928, guid: d133046990ce1b04cb56b2ff7fe3e95e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8456729596911733457, guid: d133046990ce1b04cb56b2ff7fe3e95e, type: 3}
+      propertyPath: drag
+      value: 700
+      objectReference: {fileID: 0}
+    - target: {fileID: 8456729596911733457, guid: d133046990ce1b04cb56b2ff7fe3e95e, type: 3}
+      propertyPath: springiness
+      value: 250
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

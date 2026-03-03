@@ -20,16 +20,13 @@ public class PhysicsHand : MonoBehaviour
     [SerializeField] float rotDamping = 0.9f;
     [Header("Player Pushback Controls")]
     [SerializeField] Rigidbody playerRigidbody;
+    [SerializeField] float displacementThreshold = 0.0f;
     [SerializeField] float springiness = 50f;
     [SerializeField] float drag = 25f;
-    [Header("Grabbing")]
-    [SerializeField] string grabTag = "GrabPoint";
-    [SerializeField] XRInputValueReader<float> grabInput;
-    bool isGrabbing = false;
-
-    bool isColliding = false;
-    float maxFrictionOfCollisions = 0f;
-
+    [Header("Grab Controls")]
+    [SerializeField]XRInputValueReader<float> grabInput = new XRInputValueReader<float>("Grab");
+    [SerializeField]float grabCheckRadius = 0.15f;
+    [SerializeField]LayerMask interactableLayer;
     
     void Start()
     {
@@ -46,13 +43,25 @@ public class PhysicsHand : MonoBehaviour
         PIDMovement();
         PIDRotation();
 
+        Vector3 displacement = GetHandControllerDisplacement();
+        if(displacement.magnitude > displacementThreshold){
+            ApplyPushToPlayer(displacement - displacement.normalized * displacementThreshold);
+        }
+    }
 
-        if (isColliding)
-        {
-            
-            ApplyPushToPlayer();
+
+    Vector3 GetHandControllerDisplacement(){
+        Vector3 handToController = controllerTransform.position - handRigidbody.position;
+
+        Vector3 displacement = Vector3.zero;
+        RaycastHit hit;
+        if(Physics.Raycast(handRigidbody.position, handToController.normalized, out hit, handToController.magnitude)){
+            displacement = hit.point - controllerTransform.position;
         }
 
+        Debug.DrawRay(controllerTransform.position, displacement, Color.green, Time.fixedDeltaTime);
+
+        return displacement;
     }
 
     void PIDMovement()
@@ -88,17 +97,15 @@ public class PhysicsHand : MonoBehaviour
         handRigidbody.AddTorque(torque, ForceMode.Acceleration);
     }
 
-    void ApplyPushToPlayer()
+    void ApplyPushToPlayer(Vector3 displacement)
     {
-        Vector3 displacement = transform.position - controllerTransform.position;
         Vector3 force = displacement * springiness;
         float dragCoefficient = GetDrag();
-        float frictionCoefficient = maxFrictionOfCollisions;
-        Vector3 springForce = force * frictionCoefficient;
-        Vector3 dragForce = dragCoefficient * -playerRigidbody.linearVelocity * drag * frictionCoefficient;
-
+        Vector3 springForce = force;
+        Vector3 dragForce = dragCoefficient * -playerRigidbody.linearVelocity * drag;
+        Vector3 finalForce = springForce + dragForce;
         playerRigidbody.AddForce(springForce, ForceMode.Acceleration);
-        playerRigidbody.AddForce(dragForce, ForceMode.Acceleration);
+
     }
 
     Vector3 previousPosition;
@@ -107,35 +114,7 @@ public class PhysicsHand : MonoBehaviour
         Vector3 handVelocity = (controllerTransform.localPosition - previousPosition) / Time.fixedDeltaTime;
         float drag = 1 / handVelocity.magnitude + 0.01f;
         drag = Mathf.Clamp(drag, 0.03f, 1);
-        previousPosition = transform.position;
+        previousPosition = controllerTransform.localPosition;
         return drag;
-    }
-
-    private void OnCollisionStay(Collision collision)
-    {
-        isColliding = true;
-
-        if (collision.collider.material.dynamicFriction > maxFrictionOfCollisions)
-        {
-            maxFrictionOfCollisions = collision.collider.material.dynamicFriction;
-        }
-    }
-
-    private void StartGrab()
-    {
-        isGrabbing = true;
-        handRigidbody.isKinematic = true;
-    }
-
-    private void EndGrab()
-    {
-        isGrabbing = false;
-        handRigidbody.isKinematic = false;
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        isColliding = false;
-        maxFrictionOfCollisions = 0.0f;
     }
 }

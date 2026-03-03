@@ -15,9 +15,9 @@ TagManager:
   - Water
   - UI
   - Body
-  - GrabLayer
-  - 
-  - 
+  - Grabbable
+  - Ledge
+  - Audio Insulator
   - 
   - 
   - 
