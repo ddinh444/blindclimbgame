@@ -23,6 +23,8 @@
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
+            #define MAX_AUDIO_SOURCES 10
+
             struct AudioSourceData
             {
                 float3 position;
@@ -63,8 +65,8 @@
             {
                 float accum = 0.0;
 
-                [loop]
-                for (int i = 0; i < _AudioSourceCount; i++)
+                [unroll]
+                for (int i = 0; i < MAX_AUDIO_SOURCES; i++)
                 {
                     AudioSourceData src = _AudioSources[i];
 

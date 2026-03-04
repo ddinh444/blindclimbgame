@@ -7,7 +7,7 @@ public class EcholocationSingleton : MonoBehaviour
 
     [SerializeField]
     float waveSpeed = 25f;
-    const int MAX_SOURCES = 16;
+    const int MAX_SOURCES = 10;
 
     [StructLayout(LayoutKind.Sequential)]
     struct AudioSourceData
@@ -76,10 +76,8 @@ public class EcholocationSingleton : MonoBehaviour
         audioSourceBuffer.SetData(cpuAudioSources);
         
         wavePropagationMaterial.SetBuffer("_AudioSources", audioSourceBuffer);
-        wavePropagationMaterial.SetInt("_AudioSourceCount", MAX_SOURCES);
 
         echolocationOutlineMaterial.SetBuffer("_AudioSources", audioSourceBuffer);
-        echolocationOutlineMaterial.SetInt("_AudioSourceCount", audioSourcesActive);
     }
 
     public void AddSound(Vector3 worldPosition, float waveLifetime, float audioMaxRange)

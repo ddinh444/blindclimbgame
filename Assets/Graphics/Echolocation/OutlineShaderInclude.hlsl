@@ -10,11 +10,12 @@ struct AudioSourceData{
 };
 
 StructuredBuffer<AudioSourceData> _AudioSources;
-int _AudioSourceCount;
 
-float LinearSampleDepthBuffer(float4 UV)
+#define MAX_AUDIO_SOURCES 13
+
+float LinearSampleDepthBuffer(float2 UV)
 {
-    return Linear01Depth(SHADERGRAPH_SAMPLE_SCENE_DEPTH(UV.xy), _ZBufferParams);
+    return Linear01Depth(SHADERGRAPH_SAMPLE_SCENE_DEPTH(UV), _ZBufferParams);
 }
 
 float3 SampleNormalBuffer(float2 UV){
@@ -85,10 +86,49 @@ void NormalBasedOutlines_float(float4 UV, float2 maxPxOffset, out float Out){
     Out = smoothstep(1.5f, 2.25f,sqrt(g));
 }
 
+void RobertsCrossNormalBasedOutlines(float2 UV, float2 maxPxOffset, out float Out){
+    float2 UVs[4];
+    UVs[0] = UV + maxPxOffset * float2(-1,-1);
+    UVs[1] = UV + maxPxOffset * float2(1,-1);
+    UVs[2] = UV + maxPxOffset * float2(-1,1);
+    UVs[3] = UV + maxPxOffset * float2(1,1);
+
+    float3 normals[4];
+    [unroll]
+    for(int i = 0; i < 4; i++){
+        normals[i] = SampleNormalBuffer(UVs[i]);
+    }
+
+    float3 diff1 = normals[1] - normals[2];
+    float3 diff2 = normals[0] - normals[3];
+
+    Out = step(0.25,sqrt(dot(diff1, diff1) + dot(diff2,diff2)));
+}
+
+void RobertsCrossDepthBasedOutlines(float2 UV, float2 maxPxOffset, out float Out){
+    float2 UVs[4];
+    UVs[0] = UV + maxPxOffset * float2(-1,-1);
+    UVs[1] = UV + maxPxOffset * float2(1,-1);
+    UVs[2] = UV + maxPxOffset * float2(-1,1);
+    UVs[3] = UV + maxPxOffset * float2(1,1);
+
+    float depths[4];
+    [unroll]
+    for(int i = 0; i < 4; i++){
+        depths[i] = LinearSampleDepthBuffer(UVs[i]);
+    }
+
+    float diff1 = depths[1] - depths[2];
+    float diff2 = depths[0] - depths[3];
+
+    Out = step(0.01,sqrt(diff1 * diff1 + diff2 * diff2));
+}
+
+
 void CalculateOutlinesWithAudioSourceMasks_float(float3 wsPos, float4 UV, float2 maxPxOffset, out float Out){
     float accumEchoStrength = 0;
-    [loop]
-    for(int i = 0; i < _AudioSourceCount; i++){
+    [unroll]
+    for(int i = 0; i < MAX_AUDIO_SOURCES; i++){
         AudioSourceData src = _AudioSources[i];
         //get the distance from all active audio sources. If in range, add to accumulated outline strength
         float3 diff = wsPos - src.position;
@@ -100,8 +140,8 @@ void CalculateOutlinesWithAudioSourceMasks_float(float3 wsPos, float4 UV, float2
     }
 
     float normalOut = 0, depthOut = 0;
-    NormalBasedOutlines_float(UV, maxPxOffset, normalOut);
-    DepthBasedOutlines_float(UV, maxPxOffset, depthOut);
+    RobertsCrossNormalBasedOutlines(UV, maxPxOffset, normalOut);
+    RobertsCrossDepthBasedOutlines(UV, maxPxOffset, depthOut);
 
     Out = accumEchoStrength * (normalOut + depthOut);
 }
