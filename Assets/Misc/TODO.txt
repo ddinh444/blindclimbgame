@@ -1,0 +1,7 @@
+-add grabbed pick up to inventory by pressing trigger
+-select from inventory by holding grip but not grabbing and a/b
+
+-TODO
+	-Inventory UI
+	-Affect movement
+	-Build scaler

@@ -110,10 +110,12 @@ public class PhysicsContinousMovement : MonoBehaviour
         }
 
         Vector3 moveDir = ComputeDesiredMoveDirection(LeftHandMoveInput.ReadValue());
-        Vector3 targetSpeed = penaltyTimer > 0 ? moveDir * maxSpeed : moveDir * maxSpeed * slowMultiplier;
+        float weightNormalized = Mathf.InverseLerp(0, 10, Inventory.Instance.GetTotalWeight());
+        float weightMultiplier = 1 - Mathf.Lerp(0,0.65f, weightNormalized);
+        Vector3 targetSpeed = penaltyTimer > 0 ? moveDir * maxSpeed : moveDir * maxSpeed * slowMultiplier * weightMultiplier;
         Vector3 velDiff = targetSpeed - playerRigidbody.linearVelocity;
         velDiff.y = 0;
-        playerRigidbody.AddForce(velDiff * acceleration * control, ForceMode.Acceleration);
+        playerRigidbody.AddForce(velDiff * control * acceleration, ForceMode.Acceleration);
 
         lastVerticalVelocity = playerRigidbody.linearVelocity.y;
         wasGroundedLastFrame = grounded;
@@ -128,7 +130,7 @@ public class PhysicsContinousMovement : MonoBehaviour
             leftControllerHaptics.SendHapticImpulse(1f, .65f);
             rightControllerHaptics.SendHapticImpulse(1f, 0.65f);
             GameEvents.TriggerFallDmgNoise(transform.position);
-            EcholocationSingleton.Instance.AddSound(transform.position, 4, fallDmgHurtNoise.maxDistance);
+            EcholocationSingleton.Instance.AddSound(transform.position);
         }
 
     }

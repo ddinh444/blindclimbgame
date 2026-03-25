@@ -142,7 +142,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8542de2960b01ee47987b943761ddfd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundEmitter
-  sound: {fileID: 6363026688937938556}
+  source: {fileID: 6363026688937938556}
+  sounds:
+  - {fileID: 8300000, guid: 5ade1171014a7bb4b96106e4005eea6c, type: 3}
+  - {fileID: 8300000, guid: 3d00638fcfd69b24d87ca53157fabb6b, type: 3}
+  - {fileID: 8300000, guid: 5f82e6bbb7dd97343a7313cf2864b70d, type: 3}
+  - {fileID: 8300000, guid: 59bbf753be5b95743847a698318e52eb, type: 3}
   soundCooldown: 4
   waveLifetime: 0
 --- !u!1001 &4334334985032992098

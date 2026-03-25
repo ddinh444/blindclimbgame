@@ -6,19 +6,30 @@ using UnityEngine.InputSystem;
 public class PhysicsGrab : MonoBehaviour
 {
     public InputActionProperty grabInputSource;
+    [SerializeField] InputActionProperty pickupInputSource;
+    [SerializeField] InputActionProperty selectUpInput;
+    [SerializeField] InputActionProperty selectDownInput;
     public float radius = 0.1f;
     public LayerMask grabLayer;
 
     [SerializeField] private PhysicsContinousMovement movementScript;
+    [SerializeField] private Animator anim;
 
     private FixedJoint fixedJoint;
     private bool isGrabbing = false;
+    private GameObject heldObject;
+
+    private float timer = 0;
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        timer -= Time.fixedDeltaTime;
         bool isGrabButtonPressed = grabInputSource.action.ReadValue<float>() > 0.1f;
         bool canGrab = movementScript != null ? movementScript.hasStamina : true;
+
+        anim.SetFloat("Grip", grabInputSource.action.ReadValue<float>());
+
         if (isGrabButtonPressed && !isGrabbing && canGrab)
         {
             Collider[] nearbyColliders = Physics.OverlapSphere(transform.position, radius, grabLayer, QueryTriggerInteraction.Ignore);
@@ -29,6 +40,8 @@ public class PhysicsGrab : MonoBehaviour
 
                 fixedJoint = gameObject.AddComponent<FixedJoint>();
                 fixedJoint.autoConfigureConnectedAnchor = false;
+
+                heldObject = nearbyColliders[0].gameObject;
 
                 if (nearbyRigidbody)
                 {
@@ -45,12 +58,40 @@ public class PhysicsGrab : MonoBehaviour
         }
         else if((!isGrabButtonPressed || !canGrab) && isGrabbing)
         {
-            isGrabbing = false;
-
-            if (fixedJoint)
-            {
-                Destroy(fixedJoint);
-            }
+            LetGo();
         }
+
+        Pickup p;
+        if(isGrabbing && heldObject.TryGetComponent<Pickup>(out p) && pickupInputSource.action.ReadValue<float>() > 0.5 && timer < 0)
+        {
+            Inventory.Instance.AddItem(p);
+            LetGo();
+            timer = 0.5f;
+            return;
+        }
+
+        if(isGrabButtonPressed && !isGrabbing && pickupInputSource.action.ReadValue<float>() > 0.5 && timer < 0)
+        {
+            timer = 0.5f;
+            Inventory.Instance.GetSelectedItem(transform.position);
+        }
+
+        //updating selection
+        if(selectUpInput.action.ReadValue<float>() > 0.5)
+        {
+            Inventory.Instance.UpdateSelectedItem(-1);
+            return;
+        }
+
+        if(selectDownInput.action.ReadValue<float>() > 0.5)
+        {
+            Inventory.Instance.UpdateSelectedItem(1);
+        }
+    }
+
+    void LetGo()
+    {
+        isGrabbing = false;
+        if(fixedJoint) Destroy(fixedJoint);
     }
 }
