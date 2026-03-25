@@ -29,7 +29,7 @@ public class Scaler : MonoBehaviour
         {
             foreach(Pickup p in objectsInTrigger)
             {
-                p.UpdateScale(1);
+                p.UpdateScale(0.5f);
             }
             timer = changeCooldown;
             return;
@@ -39,7 +39,7 @@ public class Scaler : MonoBehaviour
         {
                         foreach(Pickup p in objectsInTrigger)
             {
-                p.UpdateScale(-1);
+                p.UpdateScale(-0.5f);
             }
             timer = changeCooldown;
         }

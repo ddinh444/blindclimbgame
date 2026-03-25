@@ -1,22 +1,37 @@
 using System;
+using Unity.Mathematics;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Pickup : MonoBehaviour
 {
     const float minScale = 0.5f;
-    const float maxScale = 3;
+    const float maxScale = 2f;
     public String itemName;
     [SerializeField] private float weight;
     [SerializeField] private AudioSource audioSrc;
     private float scaleMultiplier = 1;
     private Vector3 startScale;
 
+    private float noiseCooldown = 0.2f;
+    public float noiseTimer;
+
     void Start()
     {
         gameObject.layer = LayerMask.NameToLayer("Grabbable");
         startScale = transform.localScale;
         scaleMultiplier = 1;
+        noiseTimer = noiseCooldown;
+    }
+
+    void OnEnable()
+    {
+        noiseTimer = noiseCooldown;
+    }
+
+    void Update()
+    {
+        noiseTimer -= Time.deltaTime;
     }
 
     public float GetWeight()
@@ -38,9 +53,15 @@ public class Pickup : MonoBehaviour
         {
             return;
         }
+
+        if(noiseTimer > 0)
+        {
+            return;
+        }
         audioSrc.Play();
         float waveDuration = GetWeight();
         EcholocationSingleton.Instance.AddSound(transform.position, waveDuration);
-        EnemySoundDetectionSystem.Instance.CheckForInvestigativeSound(transform.position, 3f * weight);
+        EnemySoundDetectionSystem.Instance.CheckForInvestigativeSound(transform.position, 10f * weight);
+        noiseTimer = noiseCooldown;
     }
 }

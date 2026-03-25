@@ -4,9 +4,6 @@ using UnityEngine;
 public class KeyScript : MonoBehaviour
 {
     [SerializeField] private AudioSource pickupNoise;
-    [SerializeField] private MeshRenderer renderer;
-
-    float timer = 0;
 
     void Update()
     {
@@ -20,9 +17,9 @@ public class KeyScript : MonoBehaviour
         {
             return;
         }
-        renderer.enabled = false;
         pickupNoise.Play();
         EcholocationSingleton.Instance.AddSound(transform.position);
         Inventory.Instance.AddKeyItem(KeyItems.Level1Key);
+        gameObject.SetActive(false);
     }
 }

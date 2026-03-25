@@ -235,10 +235,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelSelectUI
   levels:
-  - levelName: Navigation
-    sceneIndex: 1
-  - levelName: Manipulation
-    sceneIndex: 2
+  - levelName: Level 1(Navigation)
+    sceneIndex: 4
+  - levelName: Level 2(Manipulation)
+    sceneIndex: 5
   container: {fileID: 8000788}
   levelTextPrefab: {fileID: 5241972779294672784, guid: ea36475571ec516479ea308be5a5a94c, type: 3}
   LeftHandMoveInput:

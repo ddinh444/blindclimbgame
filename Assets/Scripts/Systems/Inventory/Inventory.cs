@@ -70,6 +70,7 @@ public class Inventory : MonoBehaviour
         regularItems.RemoveAt(selectedItemIndex);
         UpdateSelectedItem(0);
         p.gameObject.transform.position = position;
+        p.noiseTimer = 0.5f;
         p.gameObject.SetActive(true);
         return p;
     }

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.InputSystem;
+using NUnit.Framework;
 
 public class KeyTerminalScript : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class KeyTerminalScript : MonoBehaviour
 
     bool playedNoise = false;
 
-    void OnTriggerEnter(Collider collider)
+    void OnTriggerStay(Collider collider)
     {
         if(collider.tag != "Player")
         {
@@ -37,17 +38,18 @@ public class KeyTerminalScript : MonoBehaviour
             }
         }
 
-        if (!hasKey)
+        if (!hasKey && !playedNoise)
         {
             audioSrc.clip = keyMissingSound;
             audioSrc.Play();
+            playedNoise = true;
             //EcholocationSingleton.Instance.AddSound(transform.position);
         }
-        else
+        else if(!playedNoise && hasKey)
         {
             audioSrc.clip = keyPresentSound;
             audioSrc.Play();
-            Debug.Log("Opening Door");
+            playedNoise = true;
             //EcholocationSingleton.Instance.AddSound(transform.position);
             StartCoroutine(OpenDoor());
         }

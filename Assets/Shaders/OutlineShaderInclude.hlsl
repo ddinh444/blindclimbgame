@@ -15,7 +15,9 @@ StructuredBuffer<AudioSourceData> _AudioSources;
 
 float LinearSampleDepthBuffer(float2 UV)
 {
-    return Linear01Depth(SHADERGRAPH_SAMPLE_SCENE_DEPTH(UV), _ZBufferParams);
+    //return Linear01Depth(SHADERGRAPH_SAMPLE_SCENE_DEPTH(UV), _ZBufferParams);
+    float raw = SHADERGRAPH_SAMPLE_SCENE_DEPTH(UV);
+    return LinearEyeDepth(raw, _ZBufferParams);
 }
 
 float3 SampleNormalBuffer(float2 UV){
@@ -121,7 +123,11 @@ void RobertsCrossDepthBasedOutlines(float2 UV, float2 maxPxOffset, out float Out
     float diff1 = depths[1] - depths[2];
     float diff2 = depths[0] - depths[3];
 
-    Out = step(0.006,sqrt(diff1 * diff1 + diff2 * diff2));
+    float g = sqrt(diff1 * diff1 + diff2 * diff2);
+    float avgDepth = (depths[0] + depths[1] + depths[2] + depths[3]) * 0.25;
+    float normalizedG = g / (avgDepth + 1e-4);
+
+    Out = step(.1, normalizedG);
 }
 
 

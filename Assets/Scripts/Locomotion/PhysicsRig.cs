@@ -31,7 +31,7 @@ public class PhysicsRig : MonoBehaviour
         //bodyCollider.center = new Vector3(playerHead.localPosition.x, bodyCollider.height/2, playerHead.localPosition.z);
         float height =  Mathf.Clamp(playerHead.localPosition.y, bodyHeightMin, bodyHeightMax);
         RaycastHit hit;
-        if(!Physics.Raycast(headCollider.transform.position, Vector3.down,out hit, height + 0.05f,groundLayer))
+        if(!Physics.Raycast(headCollider.transform.position, Vector3.down,out hit, height + 0.05f,groundLayer, QueryTriggerInteraction.Ignore))
         {
             bodyCollider.height = 0;
             bodyCollider.transform.position = playerHead.transform.position;

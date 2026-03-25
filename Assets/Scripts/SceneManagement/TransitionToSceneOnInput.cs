@@ -11,7 +11,7 @@ public class TransitionToSceneOnInput : MonoBehaviour
     {
         foreach(InputActionProperty input in inputs)
         {
-            if(input.action.ReadValue<float>() > 0.5f)
+            if(input.action.WasPressedThisFrame())
             {
                 ActivateScene();
             }
