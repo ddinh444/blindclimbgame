@@ -6,6 +6,11 @@ public class PhysicsRig : MonoBehaviour
     public Transform leftController;
     public Transform rightController;
 
+    public Rigidbody playerRb;
+    public Rigidbody leftRb;
+    public Rigidbody rightRb;
+
+
     public ConfigurableJoint headJoint;
     public ConfigurableJoint leftHandJoint;
     public ConfigurableJoint rightHandJoint;
@@ -18,11 +23,6 @@ public class PhysicsRig : MonoBehaviour
 
     public float bodyHeightMin = 0.5f;
     public float bodyHeightMax = 2;
-
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void FixedUpdate()
@@ -55,5 +55,12 @@ public class PhysicsRig : MonoBehaviour
         EcholocationSingleton.Instance.SetLeftHandPosition(leftHandJoint.transform.position);
         EcholocationSingleton.Instance.SetRightHandPosition(rightHandJoint.transform.position);
         EcholocationSingleton.Instance.SetHeadPosition(headJoint.transform.position);
+    }
+
+    public void ApplyPlatformDelta(Vector3 delta)
+    {
+        playerRb.MovePosition(playerRb.position + delta);
+        leftRb.MovePosition(leftRb.position + delta);
+        rightRb.MovePosition(rightRb.position + delta);
     }
 }

@@ -7,16 +7,62 @@ public class MovingPlatform : MonoBehaviour
     [SerializeField]private float speed;
 
     private int index = 0;
-
-    // Update is called once per frame
-    void Update()
+    private Rigidbody rb;
+    private PhysicsRig rig;
+    private bool isPlayerOnPlatform;
+    void Start()
     {
-        transform.position = Vector3.MoveTowards(transform.position, waypoints[index].position, Time.deltaTime * speed);
-        if(Vector3.Distance(transform.position, waypoints[index].position) < 0.01f){
-            index += 1;
-            if(index > waypoints.Length){
-                index = 0;
-            }
+        rb = GetComponent<Rigidbody>();
+        rig = GameObject.FindGameObjectWithTag("Rig").GetComponent<PhysicsRig>();
+    }
+
+    void FixedUpdate()
+    {
+        if(waypoints.Length == 0)
+        {
+            return;
         }
+        Vector3 target = waypoints[index].position;
+        Vector3 newPosition = Vector3.MoveTowards(rb.position, target, Time.fixedDeltaTime * speed);
+
+        if (isPlayerOnPlatform)
+        {
+            Vector3 delta = newPosition - rb.position;
+            rig.ApplyPlatformDelta(delta);
+        }
+
+        rb.MovePosition(newPosition);
+
+        if (Vector3.Distance(rb.position, target) < 0.01f)
+        {
+            index++;
+            if (index >= waypoints.Length && loop)
+                index = 0;
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if(other.tag != "Player")
+        {
+            return;
+        }
+
+        Debug.Log("parented player");
+
+        isPlayerOnPlatform = true;
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if(other.tag != "Player")
+        {
+            return;
+        }
+
+        Debug.Log("deparented player");
+
+
+        isPlayerOnPlatform = false;
     }
 }
