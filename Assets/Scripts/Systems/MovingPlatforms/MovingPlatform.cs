@@ -11,8 +11,8 @@ public class MovingPlatform : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, waypoints[index], Time.deltaTime * speed);
-        if(Vector3.Distance(transform.position, waypoints[index]) < 0.01f){
+        transform.position = Vector3.MoveTowards(transform.position, waypoints[index].position, Time.deltaTime * speed);
+        if(Vector3.Distance(transform.position, waypoints[index].position) < 0.01f){
             index += 1;
             if(index > waypoints.Length){
                 index = 0;
