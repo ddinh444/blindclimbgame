@@ -5,11 +5,13 @@ public class MovingPlatform : MonoBehaviour
     [SerializeField]private bool loop;
     [SerializeField]private Transform[] waypoints;
     [SerializeField]private float speed;
+    [SerializeField] private float waypointLingerTime = 1;
 
     private int index = 0;
     private Rigidbody rb;
     private PhysicsRig rig;
     private bool isPlayerOnPlatform;
+    private float timer;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -35,9 +37,13 @@ public class MovingPlatform : MonoBehaviour
 
         if (Vector3.Distance(rb.position, target) < 0.01f)
         {
-            index++;
-            if (index >= waypoints.Length && loop)
-                index = 0;
+            timer += Time.fixedDeltaTime;
+            if(timer > waypointLingerTime)
+            {
+                timer = 0;
+                index++;
+                if (index >= waypoints.Length && loop) index = 0;
+            }
         }
     }
 

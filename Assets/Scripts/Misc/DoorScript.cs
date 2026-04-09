@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.XR.OpenXR.Input;
 
 public class DoorScript : MonoBehaviour
 {
@@ -22,9 +23,17 @@ public class DoorScript : MonoBehaviour
         {
             return;
         }
+        Debug.Log("Open sesame");
         openSound.Play();
         EcholocationSingleton.Instance.AddSound(transform.position);
-        EnemySoundDetectionSystem.Instance.CheckForAggroingSound(transform.position, 20);
+        if(HapticSingleton.Instance != null)
+        {
+            HapticSingleton.Instance.SendBothImpulses(1, 0.25f, 10000);
+        }
+        if(EnemySoundDetectionSystem.Instance != null)
+        {
+            EnemySoundDetectionSystem.Instance.CheckForAggroingSound(transform.position, 20);
+        }
         targetPosition = openedPosition;
         isOpen = true;
     }

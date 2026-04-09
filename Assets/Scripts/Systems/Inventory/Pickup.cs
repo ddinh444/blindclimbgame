@@ -1,6 +1,7 @@
 using System;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.XR.OpenXR.Input;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Pickup : MonoBehaviour
@@ -61,6 +62,10 @@ public class Pickup : MonoBehaviour
         audioSrc.Play();
         float waveDuration = GetWeight();
         EcholocationSingleton.Instance.AddSound(transform.position, waveDuration);
+        if(HapticSingleton.Instance != null)
+        {
+            HapticSingleton.Instance.SendDirectionalImpulse(1, 0.3f, transform.position, 1);
+        }
         EnemySoundDetectionSystem.Instance.CheckForInvestigativeSound(transform.position, 10f * weight);
         noiseTimer = noiseCooldown;
     }

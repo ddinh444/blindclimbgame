@@ -119,19 +119,19 @@ ConfigurableJoint:
   m_XDrive:
     serializedVersion: 4
     positionSpring: 5000
-    positionDamper: 50
+    positionDamper: 100
     maximumForce: 3.4028233e+38
     useAcceleration: 0
   m_YDrive:
     serializedVersion: 4
     positionSpring: 5000
-    positionDamper: 50
+    positionDamper: 100
     maximumForce: 3.4028233e+38
     useAcceleration: 0
   m_ZDrive:
     serializedVersion: 4
     positionSpring: 5000
-    positionDamper: 50
+    positionDamper: 100
     maximumForce: 3.4028233e+38
     useAcceleration: 0
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -152,7 +152,7 @@ ConfigurableJoint:
   m_SlerpDrive:
     serializedVersion: 4
     positionSpring: 5000
-    positionDamper: 50
+    positionDamper: 100
     maximumForce: 3.4028233e+38
     useAcceleration: 0
   m_ProjectionMode: 0
@@ -232,6 +232,7 @@ MonoBehaviour:
     m_Bits: 384
   movementScript: {fileID: 4400989248309283606}
   anim: {fileID: 7597177117284017971}
+  isLeft: 0
 --- !u!1 &1036638993319459532
 GameObject:
   m_ObjectHideFlags: 0
@@ -521,19 +522,19 @@ ConfigurableJoint:
   m_XDrive:
     serializedVersion: 4
     positionSpring: 5000
-    positionDamper: 50
+    positionDamper: 100
     maximumForce: 3.4028233e+38
     useAcceleration: 0
   m_YDrive:
     serializedVersion: 4
     positionSpring: 5000
-    positionDamper: 50
+    positionDamper: 100
     maximumForce: 3.4028233e+38
     useAcceleration: 0
   m_ZDrive:
     serializedVersion: 4
     positionSpring: 5000
-    positionDamper: 50
+    positionDamper: 100
     maximumForce: 3.4028233e+38
     useAcceleration: 0
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -554,7 +555,7 @@ ConfigurableJoint:
   m_SlerpDrive:
     serializedVersion: 4
     positionSpring: 5000
-    positionDamper: 50
+    positionDamper: 100
     maximumForce: 3.4028233e+38
     useAcceleration: 0
   m_ProjectionMode: 0
@@ -634,6 +635,7 @@ MonoBehaviour:
     m_Bits: 384
   movementScript: {fileID: 4400989248309283606}
   anim: {fileID: 695604367251461802}
+  isLeft: 1
 --- !u!1 &4564748286536748475
 GameObject:
   m_ObjectHideFlags: 0
@@ -880,19 +882,19 @@ ConfigurableJoint:
   m_XDrive:
     serializedVersion: 4
     positionSpring: 5000
-    positionDamper: 50
+    positionDamper: 100
     maximumForce: 3.4028233e+38
     useAcceleration: 0
   m_YDrive:
     serializedVersion: 4
     positionSpring: 5000
-    positionDamper: 50
+    positionDamper: 100
     maximumForce: 3.4028233e+38
     useAcceleration: 0
   m_ZDrive:
     serializedVersion: 4
     positionSpring: 5000
-    positionDamper: 50
+    positionDamper: 100
     maximumForce: 3.4028233e+38
     useAcceleration: 0
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -1830,7 +1832,7 @@ MonoBehaviour:
   maxSpeed: 4
   acceleration: 15
   airControl: 1
-  fallDmgVelocityThreshold: 12
+  fallDmgVelocityThreshold: 10
   slowMultiplier: 0.65
   fallDmgPenaltyDuration: 15
   fallDmgStaminaDuration: 8

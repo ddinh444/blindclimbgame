@@ -5,7 +5,9 @@ public class SoundEmitter : MonoBehaviour
     [SerializeField] private AudioSource source;
 
     [SerializeField] private AudioClip[] sounds;
-    [SerializeField] private float soundCooldown;    
+    [SerializeField] private float soundCooldown;
+    [SerializeField] private float amplitude = 0;
+    [SerializeField] private float duration = -1;
     private float timer = 0;
     void Start()
     {
@@ -25,7 +27,16 @@ public class SoundEmitter : MonoBehaviour
             }
             source.Play();
             EcholocationSingleton.Instance.AddSound(transform.position);
+            if(HapticSingleton.Instance != null)
+            {
+                if(duration == -1)
+                {
+                    duration = source.clip.length;
+                }
+                HapticSingleton.Instance.SendDirectionalImpulse(amplitude, duration, transform.position, 1);
+            }
             timer = 0;
         }
     }
+    
 }

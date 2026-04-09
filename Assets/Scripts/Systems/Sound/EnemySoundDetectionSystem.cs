@@ -17,6 +17,10 @@ public class EnemySoundDetectionSystem : MonoBehaviour
 
     public void CheckForInvestigativeSound(Vector3 origin, float radius)
     {
+        if(enemy == null)
+        {
+            return;
+        }
         if(Vector3.Distance(enemy.transform.position, origin) <= radius)
         {
             enemy.Investigate(origin);
@@ -25,6 +29,10 @@ public class EnemySoundDetectionSystem : MonoBehaviour
 
     public void CheckForAggroingSound(Vector3 origin, float radius)
     {
+        if(enemy == null)
+        {
+            return;
+        }
         if(Vector3.Distance(enemy.transform.position, origin) <= radius)
         {
             enemy.ChangeState("Attacking");

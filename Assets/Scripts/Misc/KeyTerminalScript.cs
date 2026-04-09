@@ -13,6 +13,7 @@ public class KeyTerminalScript : MonoBehaviour
     [SerializeField] private float range;
 
     bool playedNoise = false;
+    Coroutine hapticCoroutine;
 
     void OnTriggerStay(Collider collider)
     {
@@ -43,6 +44,11 @@ public class KeyTerminalScript : MonoBehaviour
             audioSrc.clip = keyMissingSound;
             audioSrc.Play();
             playedNoise = true;
+            if(hapticCoroutine != null)
+            {
+                StopCoroutine(hapticCoroutine);
+            }
+            hapticCoroutine = StartCoroutine(KeyMissingHaptics());
             //EcholocationSingleton.Instance.AddSound(transform.position);
         }
         else if(!playedNoise && hasKey)
@@ -64,5 +70,17 @@ public class KeyTerminalScript : MonoBehaviour
     {
         yield return new WaitForSeconds(1.25f);
         door.Open();
+    }
+
+    IEnumerator KeyMissingHaptics()
+    {
+        if(HapticSingleton.Instance != null)
+        {
+            HapticSingleton.Instance.SendBothImpulses(1, 0.35f, 100);
+        }
+        yield return new WaitForSeconds(0.4f);
+        HapticSingleton.Instance.SendBothImpulses(0, 0.1f, 100);
+        yield return new WaitForSeconds(0.1f);
+        HapticSingleton.Instance.SendBothImpulses(0.75f, 0.2f, 100);
     }
 }

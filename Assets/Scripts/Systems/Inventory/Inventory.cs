@@ -6,6 +6,9 @@ public enum KeyItems
 {
     Nothing,
     Level1Key,
+    Level3Key_1,
+    Level3Key_2,
+    Level3Key_3
 }
 
 public class Inventory : MonoBehaviour

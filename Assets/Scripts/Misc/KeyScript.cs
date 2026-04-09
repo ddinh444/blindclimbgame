@@ -1,9 +1,11 @@
 using System;
 using UnityEngine;
+using UnityEngine.XR.OpenXR.Input;
 
 public class KeyScript : MonoBehaviour
 {
     [SerializeField] private AudioSource pickupNoise;
+    [SerializeField] private KeyItems keyItem = KeyItems.Level1Key;
 
     void Update()
     {
@@ -19,7 +21,11 @@ public class KeyScript : MonoBehaviour
         }
         pickupNoise.Play();
         EcholocationSingleton.Instance.AddSound(transform.position);
-        Inventory.Instance.AddKeyItem(KeyItems.Level1Key);
+        if(HapticSingleton.Instance != null)
+        {
+            HapticSingleton.Instance.SendBothImpulses(.75f, 0.15f, 1);    
+        }
+        Inventory.Instance.AddKeyItem(keyItem);
         gameObject.SetActive(false);
     }
 }

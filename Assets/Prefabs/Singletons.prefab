@@ -269,6 +269,7 @@ Transform:
   - {fileID: 443918628015338637}
   - {fileID: 1211841601238821512}
   - {fileID: 8239169640809638275}
+  - {fileID: 7680799791420763103}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5403481134860108754
@@ -322,3 +323,51 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 513
   cam: {fileID: 0}
+--- !u!1 &8661157805818100446
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7680799791420763103}
+  - component: {fileID: 6498759824706097010}
+  m_Layer: 0
+  m_Name: Haptics
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7680799791420763103
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8661157805818100446}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3271625899347911766}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6498759824706097010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8661157805818100446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 014bda2c66f732c42970a6ac81608628, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HapticSingleton
+  player: {fileID: 0}
+  leftHaptics: {fileID: 0}
+  rightHaptics: {fileID: 0}
+  attenuation: 0

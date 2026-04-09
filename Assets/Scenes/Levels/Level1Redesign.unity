@@ -2352,6 +2352,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5428592199375094571, guid: 2444587a9506ad24c9ea1ce1ed9642ae, type: 3}
   m_PrefabInstance: {fileID: 87858625}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &271990915 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5797412066231557078, guid: b5abf92093b3c254184c6e4d40e43e6a, type: 3}
+  m_PrefabInstance: {fileID: 798366266}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &275606118
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8157,6 +8162,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KeyScript
   pickupNoise: {fileID: 1222167045}
+  keyItem: 1
 --- !u!4 &1097897271 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 52220e978743d7848ba7dc41d70dd121, type: 3}
@@ -9397,7 +9403,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.083333336
+  m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 3339dd96bc575ee439f59cb7ac6899d9, type: 2}
   m_BuildHeightMesh: 0
@@ -14393,6 +14399,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6498759824706097010, guid: fe66338fcee83ed459249a39e813386e, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 271990915}
+    - target: {fileID: 6498759824706097010, guid: fe66338fcee83ed459249a39e813386e, type: 3}
+      propertyPath: leftHaptics
+      value: 
+      objectReference: {fileID: 798366270}
+    - target: {fileID: 6498759824706097010, guid: fe66338fcee83ed459249a39e813386e, type: 3}
+      propertyPath: rightHaptics
+      value: 
+      objectReference: {fileID: 798366269}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

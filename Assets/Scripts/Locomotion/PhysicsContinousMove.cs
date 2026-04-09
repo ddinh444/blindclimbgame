@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit.Inputs.Haptics;
 using UnityEngine.XR.Interaction.Toolkit.Inputs.Readers;
 
@@ -41,8 +42,7 @@ public class PhysicsContinousMovement : MonoBehaviour
     private Rigidbody playerRigidbody;
     [SerializeField]
     private CapsuleCollider bodyCollider;
-    [SerializeField]
-    private LayerMask groundLayer;
+    [SerializeField]private LayerMask groundLayer;
 
     void Start()
     {
@@ -101,14 +101,19 @@ public class PhysicsContinousMovement : MonoBehaviour
             {
                 heavyBreath.Play();
             }
-            leftControllerHaptics.SendHapticImpulse(0.25f, 0.5f);
-            rightControllerHaptics.SendHapticImpulse(0.25f, 0.5f);
+            //leftControllerHaptics.SendHapticImpulse(0.25f, 0.5f);
+            //rightControllerHaptics.SendHapticImpulse(0.25f, 0.5f);
+            if(HapticSingleton.Instance != null)
+            {
+                HapticSingleton.Instance.SendBothImpulses(0.25f, 0.5f);
+            }
         }
         else
         {
             heavyBreath.Stop();
         }
 
+        //movement
         Vector3 moveDir = ComputeDesiredMoveDirection(LeftHandMoveInput.ReadValue());
         float weightNormalized = Mathf.InverseLerp(0, 10, Inventory.Instance.GetTotalWeight());
         float weightMultiplier = 1 - Mathf.Lerp(0,0.65f, weightNormalized);
@@ -127,10 +132,12 @@ public class PhysicsContinousMovement : MonoBehaviour
         {
             penaltyTimer = fallDmgPenaltyDuration;
             fallDmgHurtNoise.Play();
-            leftControllerHaptics.SendHapticImpulse(1f, .65f);
-            rightControllerHaptics.SendHapticImpulse(1f, 0.65f);
             GameEvents.TriggerFallDmgNoise(transform.position);
             EcholocationSingleton.Instance.AddSound(transform.position);
+            if(HapticSingleton.Instance != null)
+            {
+                HapticSingleton.Instance.SendBothImpulses(1, 0.3f, 1000);
+            }
         }
 
     }

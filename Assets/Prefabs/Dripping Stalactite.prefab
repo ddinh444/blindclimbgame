@@ -46,7 +46,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 5ade1171014a7bb4b96106e4005eea6c, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.7
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -144,12 +144,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SoundEmitter
   source: {fileID: 6363026688937938556}
   sounds:
-  - {fileID: 8300000, guid: 5ade1171014a7bb4b96106e4005eea6c, type: 3}
+  - {fileID: 8300000, guid: f71d10bb3080dd944b4019fa87cf2223, type: 3}
   - {fileID: 8300000, guid: 3d00638fcfd69b24d87ca53157fabb6b, type: 3}
-  - {fileID: 8300000, guid: 5f82e6bbb7dd97343a7313cf2864b70d, type: 3}
+  - {fileID: 8300000, guid: 1507099ff1fb1a440b230abad191e057, type: 3}
   - {fileID: 8300000, guid: 59bbf753be5b95743847a698318e52eb, type: 3}
   soundCooldown: 4
-  waveLifetime: 0
+  amplitude: 0.65
+  duration: 0.2
 --- !u!1001 &4334334985032992098
 PrefabInstance:
   m_ObjectHideFlags: 0

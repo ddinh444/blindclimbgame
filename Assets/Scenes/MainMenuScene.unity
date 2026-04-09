@@ -239,6 +239,8 @@ MonoBehaviour:
     sceneIndex: 4
   - levelName: Level 2(Manipulation)
     sceneIndex: 5
+  - levelName: Level 3(Haptics)
+    sceneIndex: 7
   container: {fileID: 8000788}
   levelTextPrefab: {fileID: 5241972779294672784, guid: ea36475571ec516479ea308be5a5a94c, type: 3}
   LeftHandMoveInput:

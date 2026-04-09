@@ -15,6 +15,8 @@ public class PhysicsGrab : MonoBehaviour
     [SerializeField] private PhysicsContinousMovement movementScript;
     [SerializeField] private Animator anim;
 
+    public bool isLeft = false;
+
     private FixedJoint fixedJoint;
     private bool isGrabbing = false;
     private GameObject heldObject;
@@ -53,6 +55,12 @@ public class PhysicsGrab : MonoBehaviour
                     fixedJoint.connectedAnchor = transform.position;
                 }
 
+                if(HapticSingleton.Instance != null)
+                {
+                    if(isLeft) HapticSingleton.Instance.SendLeftImpulse(0.65f, 0.1f);
+                    else HapticSingleton.Instance.SendRightImpulse(0.65f, 0.1f);
+                }
+
                 isGrabbing = true;
             }
         }
@@ -65,6 +73,11 @@ public class PhysicsGrab : MonoBehaviour
         if(isGrabbing && heldObject.TryGetComponent<Pickup>(out p) && pickupInputSource.action.ReadValue<float>() > 0.5 && timer < 0)
         {
             Inventory.Instance.AddItem(p);
+            if(HapticSingleton.Instance != null)
+            {
+                if(isLeft) HapticSingleton.Instance.SendLeftImpulse(0.5f, 0.15f);
+                else HapticSingleton.Instance.SendRightImpulse(1f, 0.15f);
+            }
             LetGo();
             timer = 0.5f;
             return;
@@ -74,6 +87,12 @@ public class PhysicsGrab : MonoBehaviour
         {
             timer = 0.5f;
             Inventory.Instance.GetSelectedItem(transform.position);
+
+            if(HapticSingleton.Instance != null)
+            {
+                if(isLeft) HapticSingleton.Instance.SendLeftImpulse(1f, 0.15f);
+                else HapticSingleton.Instance.SendRightImpulse(1f, 0.15f);
+            }
         }
 
         //updating selection

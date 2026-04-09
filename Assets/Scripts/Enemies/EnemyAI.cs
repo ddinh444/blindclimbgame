@@ -154,6 +154,10 @@ public class EnemyAI : MonoBehaviour
             {
                 ai.spatialAudioSrc.clip = ai.hangingNoise;
                 ai.spatialAudioSrc.Play();
+                if(HapticSingleton.Instance != null)
+                {
+                    HapticSingleton.Instance.SendDirectionalImpulse(1, 0.3f, ai.transform.position, 10);
+                }
                 EcholocationSingleton.Instance.AddSound(ai.transform.position, ai.hangingNoise.length + .5f);
                 hasMadeNoise = true;
             }
@@ -239,6 +243,10 @@ public class EnemyAI : MonoBehaviour
                 int index = UnityEngine.Random.Range(0, ai.patrolNoises.Length);
                 ai.spatialAudioSrc.clip = ai.patrolNoises[index];
                 ai.spatialAudioSrc.Play();
+                if(HapticSingleton.Instance != null)
+                {
+                    HapticSingleton.Instance.SendDirectionalImpulse(0.85f, 0.15f, ai.transform.position, 10);
+                }
                 EcholocationSingleton.Instance.AddSound(ai.transform.position, ai.spatialAudioSrc.clip.length);
                 noiseTimer = 0;
             }
@@ -288,6 +296,10 @@ public class EnemyAI : MonoBehaviour
         {
             ai.spatialAudioSrc.clip = ai.investigateStartNoise;
             ai.spatialAudioSrc.Play();
+            if(HapticSingleton.Instance != null)
+            {
+                HapticSingleton.Instance.SendDirectionalImpulse(0.85f, 0.15f, ai.transform.position, 10);
+            }
             EcholocationSingleton.Instance.AddSound(ai.transform.position);
             ai.agent.SetDestination(ai.investigateTarget);
             isIdle = false;
@@ -319,6 +331,10 @@ public class EnemyAI : MonoBehaviour
                 {
                     ai.spatialAudioSrc.clip = ai.investigateEndNoise;
                     ai.spatialAudioSrc.Play();
+                    if(HapticSingleton.Instance != null)
+                    {
+                        HapticSingleton.Instance.SendDirectionalImpulse(0.85f, 0.15f, ai.transform.position, 10);
+                    }
                     EcholocationSingleton.Instance.AddSound(ai.transform.position);
                     ai.ChangeState("Patrolling");
                 }
@@ -354,6 +370,10 @@ public class EnemyAI : MonoBehaviour
                 int index = UnityEngine.Random.Range(0, ai.attackingNoises.Length);
                 ai.spatialAudioSrc.clip = ai.attackingNoises[index];
                 ai.spatialAudioSrc.Play();
+                if(HapticSingleton.Instance != null)
+                {
+                    HapticSingleton.Instance.SendDirectionalImpulse(1, .3f, ai.transform.position, 10);
+                }
                 EcholocationSingleton.Instance.AddSound(ai.transform.position);
                 noiseTimer = 0;
             }

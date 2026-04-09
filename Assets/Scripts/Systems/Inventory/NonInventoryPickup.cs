@@ -34,6 +34,10 @@ public class NonInventoryPickup : MonoBehaviour
         audioSrc.Play();
         float waveDuration = weight;
         EcholocationSingleton.Instance.AddSound(transform.position, waveDuration);
+        if(HapticSingleton.Instance != null)
+        {
+            HapticSingleton.Instance.SendDirectionalImpulse(1, 0.3f, transform.position, 1);
+        }
         EnemySoundDetectionSystem.Instance.CheckForInvestigativeSound(transform.position, 3f * weight);
         noiseTimer = noiseCooldown;
     }
