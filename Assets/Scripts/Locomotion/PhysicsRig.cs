@@ -52,6 +52,10 @@ public class PhysicsRig : MonoBehaviour
 
         headJoint.targetPosition = playerHead.localPosition;
 
+    }
+
+    void Update()
+    {
         EcholocationSingleton.Instance.SetLeftHandPosition(leftHandJoint.transform.position);
         EcholocationSingleton.Instance.SetRightHandPosition(rightHandJoint.transform.position);
         EcholocationSingleton.Instance.SetHeadPosition(headJoint.transform.position);

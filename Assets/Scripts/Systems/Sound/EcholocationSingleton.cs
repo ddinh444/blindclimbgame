@@ -107,6 +107,11 @@ public class EcholocationSingleton : MonoBehaviour
         cpuAudioSources[audioSourcesActive - 1].position = position;
     }
 
+    public void SetHeadRadius(float rad)
+    {
+        cpuAudioSources[audioSourcesActive - 1].radius = rad;
+    }
+
     void OnDestroy()
     {
         audioSourceBuffer.Dispose();
